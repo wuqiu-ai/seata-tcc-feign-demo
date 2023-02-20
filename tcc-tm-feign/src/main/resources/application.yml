@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: seata-tcc-tm-feign
+  cloud:
+    alibaba:
+      seata:
+        tx-service-group: my_test_tx_group
+
+server:
+  port: 8082
+  tomcat:
+    max-threads: 500
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.202.137:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+
+logging:
+  level:
+    root: info
+
+#====================================Seata Config===============================================
+## Seata接入
+seata:
+  # 关闭自动代理
+  enable-auto-data-source-proxy: false
+  ## 配置中心采用apollo
+  config:
+    type: apollo
+    apollo:
+      apollo-meta: http://127.0.0.1
+      app-id: seata-demo
+      namespace: framework.seata-common
+  ## 注册中心采用redis
+  registry:
+    type: eureka
+    eureka:
+      application: seata-server
+      service-url: http://192.168.202.137:8761/eureka
+  tx-service-group: my_test_tx_group
